@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>BT ES6</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"
+      integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+
+    <!-- Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="./css/index.css" />
+  </head>
+  <body>
+    <div class="container">
+      <nav class="navbar navbar-expand-sm navbar-dark bg-primary">
+        <a class="navbar-brand" href="#">Navbar</a>
+        <button
+          class="navbar-toggler d-lg-none"
+          type="button"
+          data-toggle="collapse"
+          data-target="#collapsibleNavId"
+          aria-controls="collapsibleNavId"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        ></button>
+        <div class="collapse navbar-collapse" id="collapsibleNavId">
+          <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+            <li class="nav-item active">
+              <a class="nav-link" href="#"
+                >Home <span class="sr-only">(current)</span></a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Link</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                id="dropdownId"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+                >Dropdown</a
+              >
+              <div class="dropdown-menu" aria-labelledby="dropdownId">
+                <a class="dropdown-item" href="#">Action 1</a>
+                <a class="dropdown-item" href="#">Action 2</a>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </nav>
+
+      <header style="font-weight: 500" class="display-4 my-4">
+        User Management
+      </header>
+      <!-- Phan tab menu -->
+      <ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+          <a
+            class="nav-link active"
+            href="#DanhSachSP"
+            role="tab"
+            data-toggle="tab"
+          >
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <label class="input-group-text" for="display">List of</label>
+              </div>
+              <select class="custom-select" name="" id="display">
+                <option value="Person">All user</option>
+                <option value="Student">Students</option>
+                <option value="Employee">Employees</option>
+                <option value="Customer">Customers</option>
+              </select>
+            </div>
+          </a>
+        </li>
+      </ul>
+      <br />
+      <!-- Tab panes -->
+      <div class="tab-content">
+        <!--Danh sách sản phẩm -->
+        <div role="tabpanel" class="tab-pane in active" id="DanhSachSP">
+          <div class="row">
+            <div class="col-md-8" id="btnLayoutAdd">
+              <!-- BEGIN BUTTOM THÊM MỚI -->
+              <!-- <div id="btnAddPerson"> -->
+              <button
+                btn-type="type"
+                class="btn btn-success"
+                data-toggle="modal"
+                data-target="#myModal"
+                id="btnAddPerson"
+              >
+                <i class="fa fa-plus mr-1"></i>
+                Add user
+              </button>
+              <!-- </div> -->
+
+              <!-- END BUTTON THÊM MỚI -->
+            </div>
+            <div class="col-md-4">
+              <!-- BEGIN TÌM KIẾM -->
+              <div class="input-group mb-3">
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Search"
+                  id="txtSearch"
+                  aria-label="Recipient's username"
+                  aria-describedby="basic-addon2"
+                />
+                <div class="input-group-append">
+                  <span class="input-group-text" id="basic-addon2"
+                    ><i class="fa fa-search"></i
+                  ></span>
+                </div>
+              </div>
+              <!-- END TÌM KIẾM -->
+            </div>
+          </div>
+          <div class="clear-fix"></div>
+          <div class="tblSanPham" id="tblList">
+            <!-- BEGIN TABLE SẢN PHẨM -->
+            <table class="table table-bordered">
+              <thead id="tblHead">
+                <th>Full Name</th>
+                <th>Address</th>
+                <th>ID</th>
+                <th>Email</th>
+                <!-- <th>Mô Tả</th> -->
+                <th>Action</th>
+              </thead>
+              <tbody id="tblBody"></tbody>
+            </table>
+            <!-- END TABLE SẢN PHẨM -->
+          </div>
+          <br />
+        </div>
+        <!-- Kết thúc danh sách sản phẩm -->
+      </div>
+
+      <!--KetThuc Tabmenu-->
+
+      <!-- The Modal -->
+      <div class="modal fade" id="myModal">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+              <h4 class="modal-title">Modal Heading</h4>
+              <!-- <button type="button" class="close" data-dismiss="modal">
+                &times;
+              </button> -->
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body">
+              <!-- type -->
+              <div class="form-group">
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"
+                      ><i class="fa fa-align-left"></i
+                    ></span>
+                  </div>
+                  <select class="form-control" id="type">
+                    <option value="Person" disabled>Select</option>
+                    <option value="Student">Student</option>
+                    <option value="Employee">Employee</option>
+                    <option value="Customer">Customer</option>
+                  </select>
+                </div>
+                <span class="sp-notifi" id="notifiType"></span>
+              </div>
+              <!-- name -->
+              <div class="form-group">
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"
+                      ><i class="fa fa-address-book"></i
+                    ></span>
+                  </div>
+                  <input
+                    id="name"
+                    class="form-control"
+                    placeholder="Full Name"
+                  />
+                </div>
+                <span class="sp-notifi" id="notifiName"></span>
+              </div>
+              <!-- idPerson -->
+              <div class="form-group">
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"
+                      ><i class="fa fa-id-card"></i
+                    ></span>
+                  </div>
+                  <input id="personId" class="form-control" placeholder="ID" />
+                </div>
+                <span class="sp-notifi" id="notifiPersonId"></span>
+              </div>
+              <!-- adress -->
+              <div class="form-group">
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"
+                      ><i class="fa fa-map-marker-alt"></i
+                    ></span>
+                  </div>
+                  <input
+                    id="address"
+                    class="form-control"
+                    placeholder="Address"
+                  />
+                </div>
+                <span class="sp-notifi" id="notifiAddress"></span>
+              </div>
+              <!-- email  -->
+              <div class="form-group">
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"
+                      ><i class="fa fa-envelope"></i
+                    ></span>
+                  </div>
+                  <input id="email" class="form-control" placeholder="Email" />
+                </div>
+                <span class="sp-notifi" id="notifiEmail"></span>
+              </div>
+
+              <!-- student  -->
+              <div id="student" class="form-group" style="display: none">
+                <!-- math -->
+                <div class="form-group">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"
+                        ><i class="fa fa-infinity"></i
+                      ></span>
+                    </div>
+                    <input
+                      id="math"
+                      class="form-control"
+                      placeholder="Math Score"
+                    />
+                  </div>
+                  <span class="sp-notifi" id="notifiMath"></span>
+                </div>
+                <!-- physics -->
+                <div class="form-group">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"
+                        ><i class="fa fa-atom"></i
+                      ></span>
+                    </div>
+                    <input
+                      id="physics"
+                      class="form-control"
+                      placeholder="Physics Score"
+                    />
+                  </div>
+                  <span class="sp-notifi" id="notifiPhysics"></span>
+                </div>
+                <!-- chemistry -->
+                <div class="form-group">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"
+                        ><i class="fa fa-flask"></i
+                      ></span>
+                    </div>
+                    <input
+                      id="chemistry"
+                      class="form-control"
+                      placeholder="Chemistry Score"
+                    />
+                  </div>
+                  <span class="sp-notifi" id="notifiChemistry"></span>
+                </div>
+                <!-- average score -->
+                <div class="form-group" id="averageS">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"
+                        ><i class="fa fa-tachometer-alt"></i
+                      ></span>
+                    </div>
+                    <input
+                      id="averageScore"
+                      class="form-control"
+                      placeholder="Average Score"
+                      readonly
+                      style="display: none"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <!-- employee -->
+              <div id="employee" class="form-group" style="display: none">
+                <!-- workingDays -->
+                <div class="form-group">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"
+                        ><i class="fa fa-sort-numeric-down"></i
+                      ></span>
+                    </div>
+                    <input
+                      id="workingDays"
+                      class="form-control"
+                      placeholder="Number of working days"
+                    />
+                  </div>
+                  <span class="sp-notifi" id="notifiWorkingDays"></span>
+                </div>
+                <!-- salaryPerDay -->
+                <div class="form-group">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"
+                        ><i class="fa fa-dollar-sign"></i
+                      ></span>
+                    </div>
+                    <input
+                      id="salaryPerDay"
+                      class="form-control"
+                      placeholder="Salary per day"
+                    />
+                  </div>
+                  <span class="sp-notifi" id="notifiSalaryPerDay"></span>
+                </div>
+                <!-- totalSalary -->
+                <div class="form-group" id="totalS">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"
+                        ><i class="fa fa-money-bill"></i
+                      ></span>
+                    </div>
+                    <input
+                      id="totalSalary"
+                      class="form-control"
+                      placeholder="Total Salary"
+                      readonly
+                      style="display: none"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <!-- customer -->
+              <div id="customer" class="form-group" style="display: none">
+                <!-- company -->
+                <div class="form-group">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"
+                        ><i class="fa fa-building"></i
+                      ></span>
+                    </div>
+                    <input
+                      id="company"
+                      class="form-control"
+                      placeholder="Company"
+                    />
+                  </div>
+                  <span class="sp-notifi" id="notifiCompany"></span>
+                </div>
+                <!-- billValue -->
+                <div class="form-group">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"
+                        ><i class="fa fa-money-bill-wave"></i
+                      ></span>
+                    </div>
+                    <input
+                      id="billValue"
+                      class="form-control"
+                      placeholder="Bill's value"
+                    />
+                  </div>
+                  <span class="sp-notifi" id="notifiBillValue"></span>
+                </div>
+                <!-- evaluate -->
+                <div class="form-group">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">
+                        <i class="fa fa-envelope-open-text"></i
+                      ></span>
+                    </div>
+                    <input
+                      id="evaluate"
+                      class="form-control"
+                      placeholder="Evaluate"
+                    />
+                  </div>
+                  <span class="sp-notifi" id="notifiEvaluate"></span>
+                </div>
+              </div>
+            </div>
+            <!-- Modal footer -->
+            <div class="modal-footer"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+      integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+      integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+      integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+      crossorigin="anonymous"
+    ></script>
+    <script type="module" src="./js/index.js"></script>
+  </body>
+</html>
