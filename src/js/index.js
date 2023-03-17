@@ -1,6 +1,3 @@
-import Person from "./Person.js";
-import { listPerson } from "./ListPerson.js";
-import { getType } from "./getType.js";
 import {
   apiGetPersons,
   apiCreatePerson,
@@ -8,11 +5,10 @@ import {
   apiGetPersonById,
   apiUpdatePersonById,
 } from "./personAPI.js";
-import People from "./People.js";
 import { Student } from "./ListPerson.js";
 import { Employee } from "./ListPerson.js";
 import { Customer } from "./ListPerson.js";
-// import validate from "./validate.js";
+
 
 getELe("#type").onchange = function getType() {
   let type = getELe("#type").value;
