@@ -1,3 +1,63 @@
-.sp-notifi{
-    color: red;
+.sp-notifi {
+  color: red;
 }
+.my-popup-custom {
+  width: 200px;
+  height: 100px;
+  background: #ffc107;
+  box-sizing: border-box; /* for inside padding */
+  padding: 10px;
+  font-weight: 600;
+  text-align: center;
+  border-radius: 20px;
+  font-size: 20px;
+
+  /* for center */
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  /* for hider */
+  display: none;
+}
+.my-popup-loading{
+    width: 200px;
+    height: 100px;
+    background: rgb(180, 237, 237);
+    box-sizing: border-box; /* for inside padding */
+    padding: 10px;
+    font-weight: 600;
+    text-align: center;
+    border-radius: 20px;
+    font-size: 26px;
+  
+    /* for center */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  
+    /* for hider */
+    display: none;
+  }
+ .my-popup-modal-loading{
+    width: 200px;
+    height: 100px;
+    background: rgb(172, 182, 242);
+    box-sizing: border-box; /* for inside padding */
+    padding: 10px;
+    font-weight: 600;
+    text-align: center;
+    border-radius: 20px;
+    font-size: 26px;
+  
+    /* for center */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  
+    /* for hider */
+    display: none;
+ }

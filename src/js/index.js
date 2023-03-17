@@ -43,12 +43,12 @@ getELe("#type").onchange = function getType() {
       getELe("#totalS").style.display = "none";
       break;
   }
-  resetForm();
-  getELe("#type").value = type;
+  resetNotifi();
 };
 
 //hàm getPerson
 async function getPerson() {
+  showPopUpLoading("Loading users...");
   try {
     const { data } = await apiGetPersons();
     const persons = data.map((person) => {
@@ -89,15 +89,18 @@ async function getPerson() {
         );
       }
     });
+    closePopUpLoading();
     renderPersons(persons);
   } catch (error) {
-    alert("API get persons error");
+    showPopUpLoading("Loading API error");
+    closePopUpLoadingError();
   }
   resetForm();
 }
 
 //Hàm getStudent
 async function getStudent() {
+  showPopUpLoading("Loading students...");
   try {
     const { data } = await apiGetPersons();
     const persons = data.map((person) => {
@@ -113,6 +116,7 @@ async function getStudent() {
         person.chemistry
       );
     });
+    closePopUpLoading();
     renderStudents(persons);
   } catch (error) {
     alert("API get students error");
@@ -122,6 +126,7 @@ async function getStudent() {
 
 //Hàm getEmployee
 async function getEmployee() {
+  showPopUpLoading("Loading employees...");
   try {
     const { data } = await apiGetPersons();
     const persons = data.map((person) => {
@@ -136,6 +141,7 @@ async function getEmployee() {
         person.salaryPerDay
       );
     });
+    closePopUpLoading();
     renderEmployees(persons);
   } catch (error) {
     alert("API get employees error");
@@ -145,6 +151,7 @@ async function getEmployee() {
 
 // Hàm getCustomer
 async function getCustomer() {
+  showPopUpLoading("Loading customers...");
   try {
     const { data } = await apiGetPersons();
     const persons = data.map((person) => {
@@ -160,6 +167,7 @@ async function getCustomer() {
         person.evaluate
       );
     });
+    closePopUpLoading();
     renderCustomers(persons);
   } catch (error) {
     alert("API get customers error");
@@ -169,6 +177,7 @@ async function getCustomer() {
 
 //Hàm thêm person
 async function createPerson() {
+  showPopUpModalLoading("Adding user...");
   try {
     const person = {
       name: getELe("#name").value,
@@ -188,70 +197,79 @@ async function createPerson() {
     const { data: persons } = await apiGetPersons();
     let isValid = validate(person, persons);
     if (!isValid) {
+      closePopUpModalLoading();
       return;
     }
+    $("#myModal").modal("hide");
+    closePopUpModalLoading();
+    showPopUp("Add user successfully");
+    closePopUp();
     const response = await apiCreatePerson(person);
     getPerson();
     resetForm();
-    $("#myModal").modal("hide");
   } catch (error) {
-    // alert("Add person error");
+    alert("Add person error");
+    // showPopUpModalLoadingError("Error");
   }
 }
 
 //Hàm xóa người dùng
 getELe("#tblBody").addEventListener("click", async (event) => {
   const personID = event.target.getAttribute("delete-id");
-  if (personID) {
-    await apiDeletePerson(personID)
-      .then(() => {
-        getPerson();
-      })
-      .catch((error) => {
-        alert("Delete person error");
-      });
+  try {
+    if (personID) {
+      showPopUp("Delete user successfully");
+      await apiDeletePerson(personID);
+      getPerson();
+      closePopUp();
+    }
+  } catch (error) {
+    alert("Delete person error");
   }
 });
 
 //Hàm xóa student/ sort student
 getELe("#tblBody").addEventListener("click", async (event) => {
   const personID = event.target.getAttribute("delete-id-student");
-  if (personID) {
-    await apiDeletePerson(personID)
-      .then(() => {
-        getStudent();
-      })
-      .catch((error) => {
-        alert("Delete student error");
-      });
+  try {
+    if (personID) {
+      showPopUp("Delete student successfully");
+      await apiDeletePerson(personID);
+      getStudent();
+      closePopUp();
+    }
+  } catch (error) {
+    alert("Delete student error");
   }
 });
 
 //Hàm xóa employee / sort employee
 getELe("#tblBody").addEventListener("click", async (event) => {
   const personID = event.target.getAttribute("delete-id-employee");
-  if (personID) {
-    await apiDeletePerson(personID)
-      .then(() => {
-        getEmployee();
-      })
-      .catch((error) => {
-        alert("Delete employee error");
-      });
+  try {
+    if (personID) {
+      showPopUp("Delete employee successfully");
+      await apiDeletePerson(personID);
+      getEmployee();
+      closePopUp();
+    }
+  } catch (error) {
+    alert("Delete employee error");
   }
 });
 
 //Hàm xóa customer/ sort customer
 getELe("#tblBody").addEventListener("click", async (event) => {
   const personID = event.target.getAttribute("delete-id-customer");
-  if (personID) {
-    await apiDeletePerson(personID)
-      .then(() => {
-        getCustomer();
-      })
-      .catch((error) => {
-        alert("Delete customer error");
-      });
+  try {
+    if (personID) {
+      showPopUp("Delete student successfully");
+      await apiDeletePerson(personID);
+      getCustomer();
+      closePopUp();
+    }
+  } catch (error) {
+    alert("Delete customer error");
   }
 });
 
@@ -277,8 +295,6 @@ function getTypeModalShow(type) {
       getELe("#customer").style.display = "none";
       getELe("#student").style.display = "none";
       getELe("#employee").style.display = "none";
-      // getELe("#averageS").style.display = "none";
-      // getELe("#totalS").style.display = "none";
       break;
   }
 }
@@ -288,6 +304,7 @@ getELe("#tblBody").addEventListener("click", async (evt) => {
   const personID = evt.target.getAttribute("watch-id");
   resetForm();
   if (personID) {
+    showPopUpLoading("Getting user's information");
     try {
       const { data: person } = await apiGetPersonById(personID);
       getELe("#name").value = person.name;
@@ -325,6 +342,7 @@ getELe("#tblBody").addEventListener("click", async (evt) => {
       `;
 
       $("#myModal").modal("show");
+      closePopUpLoading();
       // reset();
     } catch (error) {
       alert("API get user's information error");
@@ -336,6 +354,7 @@ getELe("#tblBody").addEventListener("click", async (evt) => {
 getELe("#tblBody").addEventListener("click", async (evt) => {
   const personID = evt.target.getAttribute("watch-id-Student");
   if (personID) {
+    showPopUpLoading("Getting student");
     try {
       const { data: person } = await apiGetPersonById(personID);
       getELe("#name").value = person.name;
@@ -370,6 +389,7 @@ getELe("#tblBody").addEventListener("click", async (evt) => {
       `;
 
       $("#myModal").modal("show");
+      closePopUpLoading();
       // reset();
     } catch (error) {
       alert("API get student's information error");
@@ -381,6 +401,7 @@ getELe("#tblBody").addEventListener("click", async (evt) => {
 getELe("#tblBody").addEventListener("click", async (evt) => {
   const personID = evt.target.getAttribute("watch-id-employee");
   if (personID) {
+    showPopUpLoading("Getting employee");
     try {
       const { data: person } = await apiGetPersonById(personID);
       getELe("#name").value = person.name;
@@ -411,6 +432,7 @@ getELe("#tblBody").addEventListener("click", async (evt) => {
       `;
 
       $("#myModal").modal("show");
+      closePopUpLoading();
       // reset();
     } catch (error) {
       alert("API get user's information error");
@@ -422,6 +444,7 @@ getELe("#tblBody").addEventListener("click", async (evt) => {
 getELe("#tblBody").addEventListener("click", async (evt) => {
   const personID = evt.target.getAttribute("watch-id-customer");
   if (personID) {
+    showPopUpLoading("Getting customer");
     try {
       const { data: person } = await apiGetPersonById(personID);
       getELe("#name").value = person.name;
@@ -448,6 +471,7 @@ getELe("#tblBody").addEventListener("click", async (evt) => {
       `;
 
       $("#myModal").modal("show");
+      closePopUpLoading();
       // reset();
     } catch (error) {
       alert("API get customer's information error");
@@ -463,7 +487,9 @@ getELe("#myModal").addEventListener("click", async (evt) => {
   const customerID = evt.target.getAttribute("update-id-customer");
   if (personID) {
     try {
+      showPopUpModalLoading("Updating user...");
       const person = {
+        id: personID,
         name: getELe("#name").value,
         personId: getELe("#personId").value,
         address: getELe("#address").value,
@@ -481,18 +507,24 @@ getELe("#myModal").addEventListener("click", async (evt) => {
       const { data: persons } = await apiGetPersons();
       let isValid = validate(person, persons);
       if (!isValid) {
+        closePopUpModalLoading();
         return;
       }
+      $("#myModal").modal("hide");
+      closePopUpModalLoading();
+      showPopUp("Update user successfully");
+      closePopUp();
       const response = await apiUpdatePersonById(personID, person);
       getPerson();
-      $("#myModal").modal("hide");
     } catch (error) {
       alert("Update person error");
     }
   }
   if (studentID) {
     try {
+      showPopUpModalLoading("Updating student...");
       const person = {
+        id: studentID,
         name: getELe("#name").value,
         personId: getELe("#personId").value,
         address: getELe("#address").value,
@@ -510,19 +542,24 @@ getELe("#myModal").addEventListener("click", async (evt) => {
       const { data: persons } = await apiGetPersons();
       let isValid = validate(person, persons);
       if (!isValid) {
+        closePopUpModalLoading();
         return;
       }
-
+      $("#myModal").modal("hide");
+      closePopUpModalLoading();
+      showPopUp("Update student successfully");
+      closePopUp();
       await apiUpdatePersonById(studentID, person);
       getStudent();
-      $("#myModal").modal("hide");
     } catch (error) {
       alert("Update student error");
     }
   }
   if (employeeID) {
     try {
+      showPopUpModalLoading("Updating employee...");
       const person = {
+        id: employeeID,
         name: getELe("#name").value,
         personId: getELe("#personId").value,
         address: getELe("#address").value,
@@ -540,18 +577,24 @@ getELe("#myModal").addEventListener("click", async (evt) => {
       const { data: persons } = await apiGetPersons();
       let isValid = validate(person, persons);
       if (!isValid) {
+        closePopUpModalLoading();
         return;
       }
+      $("#myModal").modal("hide");
+      closePopUpModalLoading();
+      showPopUp("Update employee successfully");
+      closePopUp();
       await apiUpdatePersonById(employeeID, person);
       getEmployee();
-      $("#myModal").modal("hide");
     } catch (error) {
       alert("Update employee error");
     }
   }
   if (customerID) {
     try {
+      showPopUpModalLoading("Updating customer...");
       const person = {
+        id: customerID,
         name: getELe("#name").value,
         personId: getELe("#personId").value,
         address: getELe("#address").value,
@@ -569,11 +612,15 @@ getELe("#myModal").addEventListener("click", async (evt) => {
       const { data: persons } = await apiGetPersons();
       let isValid = validate(person, persons);
       if (!isValid) {
+        closePopUpModalLoading();
         return;
       }
+      $("#myModal").modal("hide");
+      closePopUpModalLoading();
+      showPopUp("Update customer successfully");
+      closePopUp();
       await apiUpdatePersonById(customerID, person);
       getCustomer();
-      $("#myModal").modal("hide");
     } catch (error) {
       alert("Update customer error");
     }
@@ -655,7 +702,6 @@ function renderStudents(persons) {
                     <button class="btn btn-danger" delete-id-student="${
                       person.id
                     }">Delete student</button>
-                    <button class="btn btn-warning" >Calc Average</button>
                 </td>
                 </tr>
             `
@@ -690,16 +736,15 @@ function renderEmployees(persons) {
                 <td>${person.personId}</td>
                 <td>${person.email}</td>
                 <td>${person.workingDays}</td>
-                <td>${person.salaryPerDay}</td>
-                <td>${person.calcSalary()}</td>
+                <td>$${person.salaryPerDay}</td>
+                <td>$${person.calcSalary()}</td>
                 <td>
-                    <button class="btn btn-primary"  watch-id-employee="${
+                    <button class="btn btn-primary mb-1"  watch-id-employee="${
                       person.id
                     }">Information</button>
                     <button class="btn btn-danger"  delete-id-employee="${
                       person.id
                     }">Delete employee</button>
-                    <button class="btn btn-dark" >Calc Salary</button>
                 </td>
                 </tr>
             `
@@ -734,7 +779,7 @@ function renderCustomers(persons) {
         <td>${person.personId}</td>
         <td>${person.email}</td>
         <td>${person.company}</td>
-        <td>${person.billValue}</td>
+        <td>$${person.billValue}</td>
         <td>${person.evaluate}</td>
         <td>
           <button class="btn btn-primary"  watch-id-customer="${person.id}">Information</button>
@@ -777,6 +822,22 @@ export function resetForm() {
   getELe("#notifiBillValue").innerHTML = "";
   getELe("#notifiEvaluate").innerHTML = "";
 }
+//Reset thong bao
+function resetNotifi() {
+  getELe("#notifiName").innerHTML = "";
+  getELe("#notifiPersonId").innerHTML = "";
+  getELe("#notifiAddress").innerHTML = "";
+  getELe("#notifiEmail").innerHTML = "";
+  getELe("#notifiType").innerHTML = "";
+  getELe("#notifiMath").innerHTML = "";
+  getELe("#notifiPhysics").innerHTML = "";
+  getELe("#notifiChemistry").innerHTML = "";
+  getELe("#notifiWorkingDays").innerHTML = "";
+  getELe("#notifiSalaryPerDay").innerHTML = "";
+  getELe("#notifiCompany").innerHTML = "";
+  getELe("#notifiBillValue").innerHTML = "";
+  getELe("#notifiEvaluate").innerHTML = "";
+}
 
 //extend
 function removeAscent(str) {
@@ -801,15 +862,6 @@ function removeDot(str) {
 // validate
 function validate(person, persons) {
   isValid = true;
-
-  //Validate type
-  let type = person.type;
-  if (type == "Person") {
-    isValid = false;
-    getELe("#notifiType").innerHTML = "(*)Please select type of user";
-  } else {
-    getELe("#notifiType").innerHTML = "";
-  }
 
   //Validate name
   let nameVi = person.name;
@@ -838,11 +890,20 @@ function validate(person, persons) {
     getELe("#notifiPersonId").innerHTML =
       "(*)This field must be a string of number";
   } else {
-    if (existPerson && exist.id != person.id) {
-      isValid = false;
-      getELe("#notifiPersonId").innerHTML = "(*)This userID already exist";
+    if (person.id === undefined) {
+      if (exist) {
+        isValid = false;
+        getELe("#notifiPersonId").innerHTML = "(*)This userID already exist";
+      } else {
+        getELe("#notifiPersonId").innerHTML = "";
+      }
     } else {
-      getELe("#notifiPersonId").innerHTML = "";
+      if (exist && exist.id != person.id) {
+        isValid = false;
+        getELe("#notifiPersonId").innerHTML = "(*)This userID already exist";
+      } else {
+        getELe("#notifiPersonId").innerHTML = "";
+      }
     }
   }
 
@@ -867,113 +928,169 @@ function validate(person, persons) {
     getELe("#notifiEmail").innerHTML = "";
   }
 
-  //Validate math
+  //Validate type
+  let type = getELe("#type").value;
+  //Student
   let mathScore = getELe("#math").value;
   let math = removeDot(mathScore);
-  if (!math.trim()) {
-    isValid = false;
-    getELe("#notifiMath").innerHTML = "(*)This field can't be empty";
-  } else if (!/^[0-9]*$/.test(math)) {
-    isValid = false;
-    getELe("#notifiMath").innerHTML = "(*)This score must be a number";
-  } else if (Number(mathScore) < 0 || Number(mathScore) > 10) {
-    isValid = false;
-    getELe("#notifiMath").innerHTML = "(*)This score must be from 0 to 10";
-  } else {
-    getELe("#notifiMath").innerHTML = "";
-  }
-
-  // Validate Physics
   let physicsScore = getELe("#physics").value;
   let physics = removeDot(physicsScore);
-  if (!physics.trim()) {
-    isValid = false;
-    getELe("#notifiPhysics").innerHTML = "(*)This field can't be empty";
-  } else if (!/^[0-9]*$/.test(physics)) {
-    isValid = false;
-    getELe("#notifiPhysics").innerHTML = "(*)This score must be a number";
-  } else if (Number(physicsScore) < 0 || Number(physicsScore) > 10) {
-    isValid = false;
-    getELe("#notifiPhysics").innerHTML = "(*)This score must be from 0 to 10";
-  } else {
-    getELe("#notifiPhysics").innerHTML = "";
-  }
-
-  //Valiadate chemistry
   let chemistryScore = getELe("#chemistry").value;
   let chemistry = removeDot(chemistryScore);
-  if (!chemistry.trim()) {
-    isValid = false;
-    getELe("#notifiChemistry").innerHTML = "(*)This field can't be empty";
-  } else if (!/^[0-9]*$/.test(chemistry)) {
-    isValid = false;
-    getELe("#notifiChemistry").innerHTML = "(*)This score must be a number";
-  } else if (Number(chemistryScore) < 0 || Number(chemistryScore) > 10) {
-    isValid = false;
-    getELe("#notifiChemistry").innerHTML = "(*)This score must be from 0 to 10";
-  } else {
-    getELe("#notifiChemistry").innerHTML = "";
-  }
-
-  //Validate workingDays
+  //Employee
   let dayNumber = getELe("#workingDays").value;
-  if (!dayNumber.trim()) {
-    isValid = false;
-    getELe("#notifiWorkingDays").innerHTML = "(*)This field can't be empty";
-  } else if (!/^[0-9]*$/.test(dayNumber)) {
-    isValid = false;
-    getELe("#notifiWorkingDays").innerHTML = "(*)This field must be a number";
-  } else if (Number(dayNumber) < 0 || Number(dayNumber) > 31) {
-    isValid = false;
-    getELe("#notifiWorkingDays").innerHTML =
-      "(*)This field must be from 0 to 31";
-  } else {
-    getELe("#notifiWorkingDays").innerHTML = "";
-  }
-
-  //Validate salaryPerDay
   let salary = getELe("#salaryPerDay").value;
-  if (!salary.trim()) {
-    isValid = false;
-    getELe("#notifiSalaryPerDay").innerHTML = "(*)This field can't be empty";
-  } else if (!/^[0-9]*$/.test(salary)) {
-    isValid = false;
-    getELe("#notifiSalaryPerDay").innerHTML = "(*)This field must be a number";
-  } else {
-    getELe("#notifiSalaryPerDay").innerHTML = "";
-  }
-
-  //Validate company
+  //Customer
   let company = person.company;
-  if (!company.trim()) {
-    isValid = false;
-    getELe("#notifiCompany").innerHTML = "(*)This field can't be empty";
-  } else {
-    getELe("#notifiCompany").innerHTML = "";
-  }
-
-  //Validate billValue
   let bill = getELe("#billValue").value;
-  if (!bill.trim()) {
-    isValid = false;
-    getELe("#notifiBillValue").innerHTML = "(*)This field can't be empty";
-  } else if (!/^[0-9]*$/.test(bill)) {
-    isValid = false;
-    getELe("#notifiBillValue").innerHTML = "(*)This field must be a number";
-  } else {
-    getELe("#notifiBillValue").innerHTML = "";
-  }
-
-  //Validate evaluate
   let evaluate = person.evaluate;
-  if (!evaluate.trim()) {
+  if (type == "Person") {
     isValid = false;
-    getELe("#notifiEvaluate").innerHTML = "(*)This field can't be empty";
+    getELe("#notifiType").innerHTML = "(*)Please select type of user";
+  } else if (type == "Student") {
+    //Validate math
+    if (!math.trim()) {
+      isValid = false;
+      getELe("#notifiMath").innerHTML = "(*)This field can't be empty";
+    } else if (!/^[0-9]*$/.test(math)) {
+      isValid = false;
+      getELe("#notifiMath").innerHTML = "(*)This score must be a number";
+    } else if (Number(mathScore) < 0 || Number(mathScore) > 10) {
+      isValid = false;
+      getELe("#notifiMath").innerHTML = "(*)This score must be from 0 to 10";
+    } else {
+      getELe("#notifiMath").innerHTML = "";
+    }
+    // Validate Physics
+    if (!physics.trim()) {
+      isValid = false;
+      getELe("#notifiPhysics").innerHTML = "(*)This field can't be empty";
+    } else if (!/^[0-9]*$/.test(physics)) {
+      isValid = false;
+      getELe("#notifiPhysics").innerHTML = "(*)This score must be a number";
+    } else if (Number(physicsScore) < 0 || Number(physicsScore) > 10) {
+      isValid = false;
+      getELe("#notifiPhysics").innerHTML = "(*)This score must be from 0 to 10";
+    } else {
+      getELe("#notifiPhysics").innerHTML = "";
+    }
+    //Valiadate chemistry
+    if (!chemistry.trim()) {
+      isValid = false;
+      getELe("#notifiChemistry").innerHTML = "(*)This field can't be empty";
+    } else if (!/^[0-9]*$/.test(chemistry)) {
+      isValid = false;
+      getELe("#notifiChemistry").innerHTML = "(*)This score must be a number";
+    } else if (Number(chemistryScore) < 0 || Number(chemistryScore) > 10) {
+      isValid = false;
+      getELe("#notifiChemistry").innerHTML =
+        "(*)This score must be from 0 to 10";
+    } else {
+      getELe("#notifiChemistry").innerHTML = "";
+    }
+  } else if (type == "Employee") {
+    //Validate workingDays
+    if (!dayNumber.trim()) {
+      isValid = false;
+      getELe("#notifiWorkingDays").innerHTML = "(*)This field can't be empty";
+    } else if (!/^[0-9]*$/.test(dayNumber)) {
+      isValid = false;
+      getELe("#notifiWorkingDays").innerHTML = "(*)This field must be a number";
+    } else if (Number(dayNumber) < 0 || Number(dayNumber) > 31) {
+      isValid = false;
+      getELe("#notifiWorkingDays").innerHTML =
+        "(*)This field must be from 0 to 31";
+    } else {
+      getELe("#notifiWorkingDays").innerHTML = "";
+    }
+    //Validate salaryPerDay
+    if (!salary.trim()) {
+      isValid = false;
+      getELe("#notifiSalaryPerDay").innerHTML = "(*)This field can't be empty";
+    } else if (!/^[0-9]*$/.test(salary)) {
+      isValid = false;
+      getELe("#notifiSalaryPerDay").innerHTML =
+        "(*)This field must be a number";
+    } else {
+      getELe("#notifiSalaryPerDay").innerHTML = "";
+    }
   } else {
-    getELe("#notifiEvaluate").innerHTML = "";
+    //Validate company
+    if (!company.trim()) {
+      isValid = false;
+      getELe("#notifiCompany").innerHTML = "(*)This field can't be empty";
+    } else {
+      getELe("#notifiCompany").innerHTML = "";
+    }
+    //Validate billValue
+    if (!bill.trim()) {
+      isValid = false;
+      getELe("#notifiBillValue").innerHTML = "(*)This field can't be empty";
+    } else if (!/^[0-9]*$/.test(bill)) {
+      isValid = false;
+      getELe("#notifiBillValue").innerHTML = "(*)This field must be a number";
+    } else {
+      getELe("#notifiBillValue").innerHTML = "";
+    }
+    //Validate evaluate
+    if (!evaluate.trim()) {
+      isValid = false;
+      getELe("#notifiEvaluate").innerHTML = "(*)This field can't be empty";
+    } else {
+      getELe("#notifiEvaluate").innerHTML = "";
+    }
   }
-
   return isValid;
+}
+
+//Show PopUp
+function showPopUp(content) {
+  let html = `
+  <div class="my-popup-custom" >
+  <i class="fa fa-check"></i>
+	<span>${content}</span>
+</div>
+  `;
+  getELe("#myPopUp").innerHTML = html;
+}
+//Close PopUp
+function closePopUp() {
+  getELe(".my-popup-custom").style.display = "block";
+  setTimeout(() => {
+    return (getELe(".my-popup-custom").style.display = "none");
+  }, 1000);
+}
+//Show popUp Loading
+function showPopUpLoading(content) {
+  let html = `
+  <div class="my-popup-loading" >
+	<div class="content">${content}</div>
+</div>
+  `;
+  getELe("#popUpLoading").innerHTML = html;
+  getELe(".my-popup-loading").style.display = "block";
+}
+function showPopUpModalLoading(content) {
+  let html = `
+  <div class="my-popup-modal-loading" >
+	<div class="content">${content}</div>
+</div>
+  `;
+  getELe("#popUpModal").innerHTML = html;
+  getELe(".my-popup-modal-loading").style.display = "block";
+}
+//Close popUp Loading
+function closePopUpLoading() {
+  getELe(".my-popup-loading").style.display = "none";
+}
+//Close popupLoading error
+function closePopUpLoadingError() {
+  setTimeout(() => {
+    return (getELe(".my-popup-loading").style.display = "none");
+  }, 1500);
+}
+function closePopUpModalLoading() {
+  getELe(".my-popup-modal-loading").style.display = "none";
 }
 
 getPerson();
@@ -982,7 +1099,7 @@ getPerson();
 getELe("#btnAddPerson").addEventListener("click", (evt) => {
   resetForm();
   getTypeModalShow();
-  getELe(".modal-title").innerHTML = "Add person";
+  getELe(".modal-title").innerHTML = "Add User";
   getELe(".modal-footer").innerHTML = `
     <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
     <button class="btn btn-primary" id="createPerson">Add user</button>
